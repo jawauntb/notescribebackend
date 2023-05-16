@@ -36,6 +36,7 @@ def extract_notes():
     notes = [note2midi.pitch2note(p) for p in pitches]
     print('done')
     return jsonify({"notes": notes}), 200
-  
+
+# committing
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
