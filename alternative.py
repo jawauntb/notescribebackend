@@ -1,11 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from aubio import source, pitch, note2midi
-from werkzeug.utils import secure_filename
-import os
-import tempfile
-import shutil
-from pydub import AudioSegment
+import librosa
+import numpy as np
+from music21 import pitch
 
 app = Flask(__name__)
 CORS(app)
@@ -36,32 +33,24 @@ def extract_notes():
     file_path = os.path.join(temp_dir, secure_filename(file.filename))
     # Save the file as a WAV file
     audio.export(file_path, format="wav")
-    
+
     try:
-        win_s = 4096
-        hop_s = win_s // 2
-        s = source(file_path, 0, hop_s)
-        tolerance = 0.8
-        pitch_o = pitch("yin", win_s, hop_s, s.samplerate)
-        pitch_o.set_unit("midi")
-        pitch_o.set_tolerance(tolerance)
-        pitches = []
-        while True:
-            samples, read = s()
-            pitch_val = pitch_o(samples)[0]
-            # Only append pitches above a certain threshold to eliminate noise
-            if pitch_val > 0.0:
-                pitches.append(pitch_val)
-            if read < hop_s:
-                break
-        # Convert pitches to musical notes
-        notes = [note2midi.pitch2note(p) for p in pitches]
-        print('done')
+        # Load the audio file using librosa
+        y, sr = librosa.load(file_path)
+        
+        # Compute the short-time Fourier Transform (stft)
+        D = np.abs(librosa.stft(y))
+
+        # Compute the pitch (in Hz)
+        pitches, magnitudes = librosa.piptrack(y=y, sr=sr)
+
+        # Select out pitches with high amplitudes
+        pitches = pitches[magnitudes > np.median(magnitudes)]
+        
+        # Convert frequencies in Hz to note names
+        notes = [pitch.Pitch(freq).name for freq in pitches]
     finally:
         # Remove the temporary directory and its contents
         shutil.rmtree(temp_dir)
     
     return jsonify({"notes": notes}), 200
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)

@@ -373,6 +373,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "pydub"
+version = "0.25.1"
+description = "Manipulate audio with an simple and easy high level interface"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pyflakes"
 version = "2.5.0"
 description = "passive checker of Python programs"
@@ -567,6 +575,14 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
+name = "wave"
+version = "0.0.2"
+description = "Whole Architecture Verification"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "werkzeug"
 version = "2.2.2"
 description = "The comprehensive WSGI web application library."
@@ -611,7 +627,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "3370bc015ccf9f0b4b769797628cfde59a5cb47d61f27a531c92d1294c66fc95"
+content-hash = "2fe49d984278879846d7f08bff68a8a6322ab26e954925d6f94dae66c9d6467e"
 
 [metadata.files]
 aiohttp = []
@@ -647,6 +663,7 @@ pluggy = []
 protobuf = []
 pycparser = []
 pycryptodomex = []
+pydub = []
 pyflakes = []
 pyseto = []
 python-lsp-jsonrpc = []
@@ -661,6 +678,7 @@ tomli = []
 typing-extensions = []
 ujson = []
 urllib3 = []
+wave = []
 werkzeug = []
 whatthepatch = []
 yapf = []
