@@ -11,11 +11,12 @@ def index():
 
 @app.route('/extract_notes', methods=['POST'])
 def extract_notes():
-    print('received')
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
     file = request.files['file']
-    print(f"Received file with size: {file.size}")
+    file_content = file.read()
+    print(f"Received file with size: {len(file_content)}")
+    file.seek(0)
     win_s = 4096
     hop_s = win_s // 2
     s = source(file, 0, hop_s)
